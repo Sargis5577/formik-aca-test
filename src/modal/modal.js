@@ -1,7 +1,6 @@
 import {Formik, Form, Field, ErrorMessage, useField} from 'formik';
 import * as Yup from 'yup';
 import './modal.css'
-
 const MyTextInput = ({label,...props}) => {
     const [filed,meta] = useField(props);
     return (
@@ -14,40 +13,33 @@ const MyTextInput = ({label,...props}) => {
         </>
     )
 }
+
 const CustomForm = () => {
     return (
         <Formik
             initialValues = {{
                 name:'',
-                email:'',
-                amount:'0',
-                currency:'',
                 text:'',
-                terms: false
+                select:'',
             }}
             validationSchema = {Yup.object({
                 name: Yup.string()
-                    .test(
-                        'is-james',
-                        (d) => `${d.path} is not James`,
-                        function (value) {
-                            if(value.length < 3 ) {
-                                console.log('he')
-                            }
-                        }
-                    )
                     .required('Обизателное поле!'),
-                email: Yup.string()
-                    .email('Неправилний email адрес')
+                currency: Yup.string()
                     .required('Обизателное поле!'),
+                textarea: Yup.string()
+                    .required('Обизателное поле!')
+
             })}
             onSubmit={values => console.log(JSON.stringify(values,null,2))}
         >
             <Form className="modal.css">
-                <label htmlFor="text">Ваше сообщение</label>
-                <Field
-                    id="text"
-                    name="text"
+                <h2>Отправить пожертвование</h2>
+                <MyTextInput
+                    label='Ваше имя'
+                    id="name"
+                    name="name"
+                    type="text"
                 />
                 <Field
                     id="currency"
@@ -59,7 +51,14 @@ const CustomForm = () => {
                     <option value="UAH">UAH</option>
                     <option value="RUB">RUB</option>
                 </Field>
-                <ErrorMessage name='amount' className='error' component='div'/>
+                <ErrorMessage component="div" className="error" name="currency"/>
+                <label htmlFor="text">Ваше сообщение</label>
+                <Field
+                    id="text"
+                    name="text"
+                    as="textarea"
+                />
+                <ErrorMessage component="div" className="error" name="text"/>
                 <button type="submit">Отправить</button>
             </Form>
         </Formik>
